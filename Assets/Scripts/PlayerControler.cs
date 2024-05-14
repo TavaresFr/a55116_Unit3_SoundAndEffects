@@ -8,6 +8,8 @@ public class PlayerControler : MonoBehaviour
     public float jumpForce;
     public float gravityModifier;
     public bool isOnGround = true;
+    public bool gameOver = false;
+    private Animator playerAnim;
     //Step 3.1.3
     //void Start()
     //{
@@ -18,10 +20,10 @@ public class PlayerControler : MonoBehaviour
     void Start()
     {
         playerRb = GetComponent<Rigidbody>();
+        playerAnim = GetComponent<Animator>();
         Physics.gravity *= gravityModifier;
     }
 
-    // Update is called once per frame
     void Update()
     {
         //Step 3.1.4
@@ -36,15 +38,30 @@ public class PlayerControler : MonoBehaviour
         //    playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         //}
 
-        if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
+        if (Input.GetKeyDown(KeyCode.Space) && isOnGround && !gameOver)
         {
-            playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            playerRb.AddForce(transform.up * jumpForce, ForceMode.Impulse);
             isOnGround = false;
+            playerAnim.SetTrigger("Jump_trig");
         }
     }
 
-    private void OnCollisionEnter (Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        isOnGround = true;
+        //Step 3.1.6
+        //isOnGround = true;
+
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            isOnGround = true;
+        }
+        else if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            Debug.Log("Game Over!");
+            gameOver = true;
+            playerAnim.SetBool("Death_b", true);
+            playerAnim.SetInteger("DeathType_int", 1);
+        }
+
     }
 }
