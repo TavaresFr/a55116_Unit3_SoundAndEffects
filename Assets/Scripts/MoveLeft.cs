@@ -4,27 +4,16 @@ using UnityEngine;
 
 public class MoveLeft : MonoBehaviour
 {
-    private float speed = 10;
-    private PlayerControler playerControlerScript;
-    private float leftBound = -15;
+    private float speed = 30;
 
     void Start()
     {
-        playerControlerScript = GameObject.Find("Player").GetComponent<PlayerControler>();
+        
     }
 
 
     void Update()
     {
-        if (playerControlerScript.gameOver != false)
-        {
-            transform.Translate(Vector3.left * Time.deltaTime * speed);
-        }
-
-        if (transform.position.x < leftBound && gameObject.CompareTag("Obstacle"))
-        {
-            Destroy(gameObject);
-        }
-
+        transform.Translate(Vector3.left * Time.deltaTime * speed);
     }
 }
